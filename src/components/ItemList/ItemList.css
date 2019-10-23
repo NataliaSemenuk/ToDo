@@ -1,0 +1,27 @@
+.itemList {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.itemList__button {
+    position: relative;
+    color: white;
+    font-family: 'Quicksand', sans-serif;    
+    font-size: 15px;
+    font-weight: bold;
+    width: 35px;
+    height: 35px;
+    margin: 5px;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0);
+    border: 1px solid white;
+}
+.itemList__button:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.267);
+}
+.itemList__message {
+    color: white;
+    font-size: 20px;
+    font-family: 'Quicksand', sans-serif;   
+}

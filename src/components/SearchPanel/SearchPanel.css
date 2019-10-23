@@ -1,0 +1,11 @@
+.searchPanel {
+    position: relative;
+    border: none;
+    height: 35px;
+    outline: none;
+    font-family: 'Quicksand', sans-serif; 
+    font-size: 15px; 
+    padding: 0 0 0 10px;
+    margin: 15px 0 0 0;
+    box-shadow: inset 0px 0px 10px 2px rgb(131, 131, 131);
+}
