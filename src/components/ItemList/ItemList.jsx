@@ -9,22 +9,21 @@ export default class ItemList extends Component {
     }
 
     onLabelClick = () => {
-        this.setState({
-            done: this.state.done ? false : true,
+        this.setState(({ done }) => {
+            return {
+                done: !done,
+            }
         });
     }
     onClickImportant = () => {
-        this.setState({
-            important: this.state.important ? false : true,
-        });
-    }
-    onClickDeleted = () => {
-        this.setState({
-            deleted: this.state.deleted ? false : true,
+        this.setState(({ important }) => {
+            return {
+                important: !important,
+            }
         });
     }
     render() {
-        const {label} = this.props;
+        const {label, onDeleted} = this.props;
         let classNameMess = 'itemList__message';
 
         if(this.state.done) {
@@ -44,7 +43,7 @@ export default class ItemList extends Component {
                     <button className = 'itemList__button'
                             onClick = {this.onClickImportant}>i</button>
                     <button className = 'itemList__button'
-                            onClick = {this.onClickDeleted}>d</button>
+                            onClick = {onDeleted}>d</button>
                 </div>
             </div>
     
