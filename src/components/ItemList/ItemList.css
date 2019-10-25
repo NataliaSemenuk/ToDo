@@ -27,11 +27,9 @@
     font-family: 'Quicksand', sans-serif;   
 }
 .done {
-    color: rgb(3, 3, 145);
+    text-decoration:line-through;	
 }
 .important {
-    color: green;
-}
-.deleted {
-    color: red;
+    font-weight: bold;
+    text-shadow: 4px 4px 2px black, 0 0 1em coral; ;
 }

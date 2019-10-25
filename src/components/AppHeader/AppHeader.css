@@ -1,0 +1,10 @@
+.appHeader {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+.appHeader__info {
+    color: white;
+    font-size: 20px;
+    font-family: 'Quicksand', sans-serif;
+}

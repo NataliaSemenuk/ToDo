@@ -1,6 +1,5 @@
 BODY {
   display: flex;
-  align-items: center;
   background-image: url("1.svg");
   background-repeat: no-repeat;
   background-size: cover;
@@ -8,7 +7,7 @@ BODY {
   margin: 0; 
 }
 .app {
-  margin-left: 50px;
+  margin: 80px 50px;
 }
 .app p {
   position: relative;

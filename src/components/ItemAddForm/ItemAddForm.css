@@ -1,0 +1,32 @@
+.itemAddForm {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.itemAddForm__panel {
+    position: relative;
+    border: none;
+    height: 35px;
+    outline: none;
+    font-family: 'Quicksand', sans-serif; 
+    font-size: 15px; 
+    padding: 0 0 0 10px;
+    margin: 0;
+    box-shadow: inset 0px 0px 10px 2px rgb(131, 131, 131);
+}
+.itemAddForm__button {
+    position: relative;
+    color: white;
+    font-family: 'Quicksand', sans-serif;    
+    font-size: 18px;
+    font-weight: bold;
+    width: 120px;
+    height: 40px;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0);
+    border: 2px solid white;
+}
+.itemAddForm__button:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.267);
+}
