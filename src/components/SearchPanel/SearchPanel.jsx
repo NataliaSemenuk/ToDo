@@ -5,7 +5,7 @@ const SearchPanel = ({ onChange }) => {
     return(
         <input 
             className ='searchPanel' 
-            placeholder = 'Search...'
+            placeholder = 'What do you add?'
             onChange = {onChange}/>
     );
 }

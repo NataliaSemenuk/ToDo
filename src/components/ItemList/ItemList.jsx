@@ -1,5 +1,6 @@
 import React from 'react';
 import './ItemList.css';
+import './fontello.css';
 
 const ItemList = ({label, onDeleted, onToggleImportant, onToggleDone, important, done}) => {
     let classNameMess = 'itemList__message';
@@ -16,22 +17,16 @@ const ItemList = ({label, onDeleted, onToggleImportant, onToggleDone, important,
                     onClick = {onToggleDone}>{label}</span>
             <div>
                 <button className = 'itemList__button'
-                        onClick = {onToggleImportant}>i</button>
+                        onClick = {onToggleImportant}>
+                        <i className = 'icon-star'></i>
+                </button>
                 <button className = 'itemList__button'
-                        onClick = {onDeleted}>d</button>
+                        onClick = {onDeleted}>
+                        <i className = 'icon-trash'></i>
+                </button>
             </div>
         </div>
 
     ); 
 }
 export default ItemList;
-// clickActive() {
-//     let visibleData = [];
-//     const { initialData } = this.state;
-//     initialData.forEach((item) => {
-//         if(!item.done) {
-//             visibleData.push(item);
-//         } 
-//     });
-//     return visibleData;
-// }

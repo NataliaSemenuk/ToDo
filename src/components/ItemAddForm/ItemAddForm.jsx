@@ -26,7 +26,7 @@ export default class ItemAddForm extends Component {
                     className = 'itemAddForm__panel'
                     type = 'text'
                     onChange = {this.onLabelChange}
-                    placeholder = 'What you add?'
+                    placeholder = 'Put your deal here'
                     value = {this.state.label}/>
                 <button
                     className = 'itemAddForm__button'>Add item</button>
