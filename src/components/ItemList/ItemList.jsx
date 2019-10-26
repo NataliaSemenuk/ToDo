@@ -25,3 +25,13 @@ const ItemList = ({label, onDeleted, onToggleImportant, onToggleDone, important,
     ); 
 }
 export default ItemList;
+// clickActive() {
+//     let visibleData = [];
+//     const { initialData } = this.state;
+//     initialData.forEach((item) => {
+//         if(!item.done) {
+//             visibleData.push(item);
+//         } 
+//     });
+//     return visibleData;
+// }

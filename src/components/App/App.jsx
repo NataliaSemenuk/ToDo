@@ -29,6 +29,8 @@ export default class App extends Component {
             },
         ],
         searchData: [],
+        clickDone: false,
+        clickActive: false,
     }
 
     maxId = 4;
@@ -60,7 +62,7 @@ export default class App extends Component {
 
 
     toggleProperty = (arr, id, propName) => {
-        const idx = arr.findIndex((el) => el.id === id);    
+        const idx = arr.findIndex((item) => item.id === id);    
         const newItem = {...arr[idx], [propName]: !arr[idx][propName]};
         return [...arr.slice(0, idx), newItem, ...arr.slice(idx+1)];
         
@@ -81,17 +83,16 @@ export default class App extends Component {
     }
 
 
-    onChange = (event) => {
+    onChangeSearch = (event) => {
         let textSearch = event.target.value.toLowerCase(); 
         this.setState({
                 searchData: textSearch,
         });
-        console.log('stat',this.state.searchData);
     }
-    search() {
+    search(data = this.state.initialData) {
         let visibleData = [];
-        const { searchData, initialData } =this.state;
-        initialData.forEach((item, index) => {
+        const { searchData } = this.state;
+        data.forEach((item) => {
             const label = item.label.toLowerCase();
             const foundPos = label.startsWith(searchData);
             if(foundPos) {
@@ -102,20 +103,67 @@ export default class App extends Component {
     }
 
 
+    changeStatus(status) {
+        let visibleData = [];
+        const { initialData } = this.state;
+        initialData.forEach((item) => {
+            if(item.done === status) {
+                visibleData.push(item);
+            } 
+        });
+        return visibleData;
+    }
+    clickDone = () => this.changeStatus(true);
+    clickActive = () => this.changeStatus(false);
+
+
+    onClickDone = () => {
+        this.setState({
+            clickDone: true,
+            clickActive: false,
+        });
+    }
+    onClickActive = () => {
+        this.setState({
+            clickActive: true,
+            clickDone: false,
+        });
+    }
+    onClickAll = () => {
+        this.setState({
+            clickActive: false,
+            clickDone: false,
+        });
+    }
+
+    
     render() {
-        const {initialData} = this.state;
-        const visibleData = this.search();
-      console.log('visibleData', visibleData);
+        const {initialData, clickDone, clickActive} = this.state;
+        let visibleData;
+
+        if(clickDone) {
+            visibleData = this.clickDone();
+            visibleData = this.search(visibleData);
+        } else if(clickActive) {
+            visibleData = this.clickActive();
+            visibleData = this.search(visibleData);
+        } else {
+            visibleData = this.search();
+        }
+
         const doneCount = initialData.filter((item) => item.done).length;
         const toDoCount = initialData.length - doneCount;
         return(
             <div className = 'app'>
                 <p>To Do List</p>
                 <div className = 'app__todo'>
-                    <ItemStatusFilter />
+                    <ItemStatusFilter 
+                        onClickAll = {this.onClickAll}
+                        onClickDone = {this.onClickDone}
+                        onClickActive = {this.onClickActive}/>
                     <AppHeader toDo = {toDoCount} done = {doneCount}/>
                     <SearchPanel 
-                        onChange = {this.onChange}/>
+                        onChange = {this.onChangeSearch}/>
                     <List 
                         initialData = {visibleData} 
                         onDeleted = {this.onDeleteItem} 
