@@ -1,9 +1,12 @@
 import React from 'react';
 import './SearchPanel.css';
 
-const SearchPanel = () => {
+const SearchPanel = ({ onChange }) => {
     return(
-        <input className ='searchPanel' placeholder = 'Search...'/>
+        <input 
+            className ='searchPanel' 
+            placeholder = 'Search...'
+            onChange = {onChange}/>
     );
 }
 export default SearchPanel;

@@ -28,6 +28,7 @@ export default class App extends Component {
                 id: 3,
             },
         ],
+        searchData: [],
     }
 
     maxId = 4;
@@ -57,9 +58,10 @@ export default class App extends Component {
         });
     }
 
+
     toggleProperty = (arr, id, propName) => {
         const idx = arr.findIndex((el) => el.id === id);    
-        const newItem = {...arr[idx], [propName]: !arr[idx].done};
+        const newItem = {...arr[idx], [propName]: !arr[idx][propName]};
         return [...arr.slice(0, idx), newItem, ...arr.slice(idx+1)];
         
     }
@@ -77,8 +79,33 @@ export default class App extends Component {
             }
         });
     }
+
+
+    onChange = (event) => {
+        let textSearch = event.target.value.toLowerCase(); 
+        this.setState({
+                searchData: textSearch,
+        });
+        console.log('stat',this.state.searchData);
+    }
+    search() {
+        let visibleData = [];
+        const { searchData, initialData } =this.state;
+        initialData.forEach((item, index) => {
+            const label = item.label.toLowerCase();
+            const foundPos = label.startsWith(searchData);
+            if(foundPos) {
+                visibleData.push(item);
+            } 
+        });
+        return visibleData;
+    }
+
+
     render() {
         const {initialData} = this.state;
+        const visibleData = this.search();
+      console.log('visibleData', visibleData);
         const doneCount = initialData.filter((item) => item.done).length;
         const toDoCount = initialData.length - doneCount;
         return(
@@ -87,13 +114,14 @@ export default class App extends Component {
                 <div className = 'app__todo'>
                     <ItemStatusFilter />
                     <AppHeader toDo = {toDoCount} done = {doneCount}/>
-                    <SearchPanel />
+                    <SearchPanel 
+                        onChange = {this.onChange}/>
                     <List 
-                        initialData = {initialData} 
+                        initialData = {visibleData} 
                         onDeleted = {this.onDeleteItem} 
                         onToggleImportant = {this.onToggleImportant}
                         onToggleDone = {this.onToggleDone}/>
-                        <ItemAddForm onAddItem = {this.onAddItem}/>
+                    <ItemAddForm onAddItem = {this.onAddItem}/>
                 </div>
                 
             </div>
