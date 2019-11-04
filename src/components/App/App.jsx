@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import List from '../List/List';
 import SearchPanel from '../SearchPanel/SearchPanel';
 import './App.css';
@@ -8,39 +8,29 @@ import AppHeader from '../AppHeader/AppHeader';
 
 export default function App() {
     let visibleData;
-    const [initialData, setInitialData] = useState([
-        {
-            label: 'Drink Coffee',
-            important: false,
-            done: false,
-            id: 1,
-        },
-        {
-            label: 'Eat Health Food',
-            important: false,
-            done: false,
-            id: 2,
-        },
-        {
-            label: 'Do Sports',
-            important: false,
-            done: false,
-            id: 3,
-        },
-    ]);
+    const [initialData, setInitialData] = useState([]);
     const [searchData, setSearchData] = useState([]);
     const [clickDoneFlag, setDone] = useState(false);
     const [clickActiveFlag, setActive] = useState(false);
     const doneCount = initialData.filter((item) => item.done).length;
     const toDoCount = initialData.length - doneCount;
+    useEffect(() => {
+        if(!localStorage.getItem('todos')) {
+            localStorage.setItem('todos', JSON.stringify(initialData));
+        }
+        let raw  = localStorage.getItem('todos') || [];
+        setInitialData(JSON.parse(raw));
+    }, [])
+    useEffect(() => {
+        localStorage.setItem('todos', JSON.stringify(initialData))
+    }, [initialData])
 
     const onAddItem = (text) => {
-        let maxId = 4;
         const newItem = {
             label: text,
             important: false,
             done: false,
-            id: maxId++,
+            id: Date.now(),
         }
         setInitialData([
             ...initialData, newItem 
