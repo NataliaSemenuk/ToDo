@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import List from '../List/List';
 import SearchPanel from '../SearchPanel/SearchPanel';
 import './App.css';
@@ -6,92 +6,71 @@ import ItemStatusFilter from '../ItemStatusFilter/ItemStatusFilter';
 import ItemAddForm from '../ItemAddForm/ItemAddForm';
 import AppHeader from '../AppHeader/AppHeader';
 
-export default class App extends Component {
-    state = {
-        initialData: [
-            {
-                label: 'Drink Coffee',
-                important: false,
-                done: false,
-                id: 1,
-            },
-            {
-                label: 'Eat Health Food',
-                important: false,
-                done: false,
-                id: 2,
-            },
-            {
-                label: 'Do Sports',
-                important: false,
-                done: false,
-                id: 3,
-            },
-        ],
-        searchData: [],
-        clickDone: false,
-        clickActive: false,
-    }
+export default function App() {
+    let visibleData;
+    const [initialData, setInitialData] = useState([
+        {
+            label: 'Drink Coffee',
+            important: false,
+            done: false,
+            id: 1,
+        },
+        {
+            label: 'Eat Health Food',
+            important: false,
+            done: false,
+            id: 2,
+        },
+        {
+            label: 'Do Sports',
+            important: false,
+            done: false,
+            id: 3,
+        },
+    ]);
+    const [searchData, setSearchData] = useState([]);
+    const [clickDoneFlag, setDone] = useState(false);
+    const [clickActiveFlag, setActive] = useState(false);
+    const doneCount = initialData.filter((item) => item.done).length;
+    const toDoCount = initialData.length - doneCount;
 
-    maxId = 4;
-
-    onDeleteItem = (id) => {
-        this.setState(({initialData}) => {
-            const idx = initialData.findIndex((el) => el.id === id);    
-            const newData = [...initialData.slice(0, idx), ...initialData.slice(idx+1)];
-              
-        return {
-            initialData: newData,
-        };
-        });
-    }
-    onAddItem = (text) => {
+    const onAddItem = (text) => {
+        let maxId = 4;
         const newItem = {
             label: text,
             important: false,
             done: false,
-            id: this.maxId++,
+            id: maxId++,
         }
-        this.setState(({initialData}) => {
-            const newData = [...initialData, newItem];
-            return {
-                initialData: newData,
-            }
-        });
+        setInitialData([
+            ...initialData, newItem 
+        ]);
+    }
+    const onDeleteItem = (id) => {
+        const idx = initialData.findIndex((el) => el.id === id);    
+        const newData = [...initialData.slice(0, idx), ...initialData.slice(idx+1)];
+        setInitialData(newData);
     }
 
-
-    toggleProperty = (arr, id, propName) => {
+    const toggleProperty = (arr, id, propName) => {
         const idx = arr.findIndex((item) => item.id === id);    
         const newItem = {...arr[idx], [propName]: !arr[idx][propName]};
         return [...arr.slice(0, idx), newItem, ...arr.slice(idx+1)];
         
     }
-    onToggleImportant = (id) => {
-        this.setState(({initialData}) => {
-            return {
-                initialData: this.toggleProperty(initialData, id, 'important'),
-            }
-        });
+    const onToggleImportant = (id) => {
+        setInitialData(toggleProperty(initialData, id, 'important'));
     }
-    onToggleDone = (id) => {
-        this.setState(({initialData}) => {
-            return {
-                initialData: this.toggleProperty(initialData, id, 'done'),
-            }
-        });
+    const onToggleDone = (id) => {
+        setInitialData(toggleProperty(initialData, id, 'done'));
     }
-
-
-    onChangeSearch = (event) => {
+    
+    const onChangeSearch = (event) => {
         let textSearch = event.target.value.toLowerCase(); 
-        this.setState({
-                searchData: textSearch,
-        });
+        setSearchData([textSearch]);
     }
-    search(data = this.state.initialData) {
+    function search(data = initialData) {
         let visibleData = [];
-        const { searchData } = this.state;
         data.forEach((item) => {
             const label = item.label.toLowerCase();
             const foundPos = label.startsWith(searchData);
@@ -102,10 +81,8 @@ export default class App extends Component {
         return visibleData;
     }
 
-
-    changeStatus(status) {
+    function changeStatus(status) {
         let visibleData = [];
-        const { initialData } = this.state;
         initialData.forEach((item) => {
             if(item.done === status) {
                 visibleData.push(item);
@@ -113,69 +90,52 @@ export default class App extends Component {
         });
         return visibleData;
     }
-    clickDone = () => this.changeStatus(true);
-    clickActive = () => this.changeStatus(false);
+    const clickDone = () => changeStatus(true);
+    const clickActive = () => changeStatus(false);
 
-
-    onClickDone = () => {
-        this.setState({
-            clickDone: true,
-            clickActive: false,
-        });
+    const onClickDone = () => {
+        setDone(true);
+        setActive(false);
     }
-    onClickActive = () => {
-        this.setState({
-            clickActive: true,
-            clickDone: false,
-        });
+    const onClickActive = () => {
+        setDone(false);
+        setActive(true);
     }
-    onClickAll = () => {
-        this.setState({
-            clickActive: false,
-            clickDone: false,
-        });
+    const onClickAll = () => {
+        setDone(false);
+        setActive(false);
     }
 
-    
-    render() {
-        const {initialData, clickDone, clickActive} = this.state;
-        let visibleData;
+    if(clickDoneFlag) {
+        visibleData = clickDone();
+        visibleData = search(visibleData);
+    } else if(clickActiveFlag) {
+        visibleData = clickActive();
+        visibleData = search(visibleData);
+    } else {
+        visibleData = search();
+    }
 
-        if(clickDone) {
-            visibleData = this.clickDone();
-            visibleData = this.search(visibleData);
-        } else if(clickActive) {
-            visibleData = this.clickActive();
-            visibleData = this.search(visibleData);
-        } else {
-            visibleData = this.search();
-        }
-
-        const doneCount = initialData.filter((item) => item.done).length;
-        const toDoCount = initialData.length - doneCount;
-        return(
-            <div className = 'app'>
-                <p>To Do List</p>
-                <div className = 'app__todo'>
-                    <ItemStatusFilter 
-                        onClickAll = {this.onClickAll}
-                        onClickDone = {this.onClickDone}
-                        onClickActive = {this.onClickActive}/>
-                    <AppHeader toDo = {toDoCount} done = {doneCount}/>
-                    <SearchPanel 
-                        onChange = {this.onChangeSearch}/>
-                    <List 
-                        initialData = {visibleData} 
-                        onDeleted = {this.onDeleteItem} 
-                        onToggleImportant = {this.onToggleImportant}
-                        onToggleDone = {this.onToggleDone}/>
-                    <ItemAddForm onAddItem = {this.onAddItem}/>
-                </div>
-                
+    return(
+        <div className = 'app'>
+            <p>To Do List</p>
+            <div className = 'app__todo'>
+                <ItemStatusFilter
+                    onClickAll = {onClickAll}
+                    onClickDone = {onClickDone}
+                    onClickActive = {onClickActive} />
+                <AppHeader toDo = {toDoCount} done = {doneCount}/>
+                <SearchPanel 
+                    onChange = {onChangeSearch}/>
+                <List 
+                    initialData = {visibleData}
+                    onDeleted = {onDeleteItem}
+                    onToggleImportant = {onToggleImportant}
+                    onToggleDone = {onToggleDone}/>
+                <ItemAddForm  onAddItem = {onAddItem}/>
             </div>
-        )
-
-    };
+            
+        </div>
+    );
 }
-
 

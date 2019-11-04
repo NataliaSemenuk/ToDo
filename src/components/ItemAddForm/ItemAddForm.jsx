@@ -1,36 +1,28 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import './ItemAddForm.css';
 
-export default class ItemAddForm extends Component {
-    state = {
-        label: '',
+export default function ItemAddForm(props) {
+    const [label, setLabel] = useState('');
+    const onLabelChange = (event) => {
+        setLabel(event.target.value);
     }
-    onLabelChange = (event) => {
-        this.setState({
-            label: event.target.value
-        })
-    }
-    onSubmit = (event) => {
+    const onSubmit = (event) => {
         event.preventDefault();
-        this.props.onAddItem(this.state.label);
-        this.setState({
-            label: '',
-        })
+        props.onAddItem(label);
+        setLabel('');
     }
-    render() {
-        return(
-            <form 
-                className = 'itemAddForm' 
-                onSubmit = {this.onSubmit}>
-                <input 
-                    className = 'itemAddForm__panel'
-                    type = 'text'
-                    onChange = {this.onLabelChange}
-                    placeholder = 'Put your deal here'
-                    value = {this.state.label}/>
-                <button
-                    className = 'itemAddForm__button'>Add item</button>
-            </form>
-        ); 
-    }
+    return(
+        <form 
+            className = 'itemAddForm' 
+            onSubmit = {onSubmit}>
+            <input 
+                className = 'itemAddForm__panel'
+                type = 'text'
+                onChange = {onLabelChange}
+                placeholder = 'Put your deal here'
+                value = {label}/>
+            <button
+                className = 'itemAddForm__button'>Add item</button>
+        </form>
+    ); 
 }
